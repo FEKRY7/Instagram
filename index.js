@@ -2,6 +2,7 @@ const express = require('express');
 
 const userRouter = require('./src/modules/auth/auth.routes.js')
 const ProfileRouter = require('./src/modules/profile/profile.routes.js')
+const PostRouter = require('./src/modules/post/post.routes.js')
 
 
 const mongoConnection = require('./Database/dbConnection.js');
@@ -23,6 +24,7 @@ app.use(cors())
 // Routes
 app.use('/api/auth',userRouter)
 app.use('/api/Profile',ProfileRouter)
+app.use('/api/Post',PostRouter)
  
 
 
