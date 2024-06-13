@@ -95,7 +95,12 @@ const getProfile = async (req, res) => {
 
 const DeleteProfile = async (req, res) => {
   try {
-    const findProfile = await ProfileModel.findById(req.params.id);
+    const findUser = await UserModel.findById(req.params.id);
+    if (!findUser) {
+      return First(res, "User Not Found", 404, http.FAIL);
+    }
+
+    const findProfile = await ProfileModel.findOne({CreatBy:req.params.id});
     if (!findProfile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
@@ -105,7 +110,7 @@ const DeleteProfile = async (req, res) => {
       await cloudinary.uploader.destroy(findProfile.imagePublicId);
       await cloudinary.uploader.destroy(findProfile.image);
     }
-    const DeleteProfile = await ProfileModel.findByIdAndDelete(req.params.id);
+    const DeleteProfile = await ProfileModel.findByIdAndDelete({CreatBy:req.params.id});
 
     return Second(
       res,
@@ -122,9 +127,14 @@ const DeleteProfile = async (req, res) => {
 
 const UpdateProfile = async (req, res) => {
   try {
-    const findProfile = await ProfileModel.findById(req.params.id);
+    const findUser = await UserModel.findById(req.params.id);
+    if (!findUser) {
+      return First(res, "User Not Found", 404, http.FAIL);
+    }
+
+    const findProfile = await ProfileModel.findOne({CreatBy:req.params.id});
     if (!findProfile) {
-      return res.status(404).json({ message: "UserProfile Not Found" });
+      return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
 
     // Upload new image if provided
@@ -144,7 +154,7 @@ const UpdateProfile = async (req, res) => {
 
     // Update the Profile with new details
     const updatedProfile = await ProfileModel.findByIdAndUpdate(
-      req.params.id,
+      {CreatBy:req.params.id},
       req.body,
       { new: true } // Return the updated document
     );
