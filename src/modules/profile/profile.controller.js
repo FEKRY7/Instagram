@@ -83,7 +83,7 @@ const getProfile = async (req, res) => {
       return First(res, "User Not Found", 404, http.FAIL);
     }
 
-    const getAll = await ProfileModel.findOne({CreatBy:req.params.id});
+    const getAll = await ProfileModel.find({CreatBy:req.params.id});
     return Second(res, getAll, 200, http.SUCCESS);
     
   } catch (error) {
@@ -93,24 +93,26 @@ const getProfile = async (req, res) => {
 };
 
 
+
 const DeleteProfile = async (req, res) => {
   try {
-    const findUser = await UserModel.findById(req.params.id);
-    if (!findUser) {
+    const user = await UserModel.findById(req.params.id);
+    if (!user) {
       return First(res, "User Not Found", 404, http.FAIL);
     }
 
-    const findProfile = await ProfileModel.findOne({CreatBy:req.params.id});
-    if (!findProfile) {
+    const profile = await ProfileModel.findOne({ CreatBy: req.params.id });
+    if (!profile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
 
-    // Delete the Profile image from Cloudinary
-    if (findProfile.imagePublicId && findProfile.image) {
-      await cloudinary.uploader.destroy(findProfile.imagePublicId);
-      await cloudinary.uploader.destroy(findProfile.image);
+    // Delete the profile image from Cloudinary
+    if (profile.imagePublicId) {
+      await cloudinary.uploader.destroy(profile.imagePublicId);
     }
-    const DeleteProfile = await ProfileModel.findByIdAndDelete({CreatBy:req.params.id});
+
+    // Delete the profile
+    await ProfileModel.findOneAndDelete({ CreatBy: req.params.id });
 
     return Second(
       res,
@@ -118,22 +120,23 @@ const DeleteProfile = async (req, res) => {
       200,
       http.SUCCESS
     );
-  } catch (error) {
+  }  catch (error) {
     console.error(error);
-    return Third(res, "Internal Server Error", 500, http.ERROR);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 
+
 const UpdateProfile = async (req, res) => {
   try {
-    const findUser = await UserModel.findById(req.params.id);
-    if (!findUser) {
+    const user = await UserModel.findById(req.params.id);
+    if (!user) {
       return First(res, "User Not Found", 404, http.FAIL);
     }
 
-    const findProfile = await ProfileModel.findOne({CreatBy:req.params.id});
-    if (!findProfile) {
+    const profile = await ProfileModel.findOne({ CreatBy: req.params.id });
+    if (!profile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
 
@@ -141,35 +144,36 @@ const UpdateProfile = async (req, res) => {
     if (req.file) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
         req.file.path,
-        { folder: `InstagramProject/Profile/${findProfile._id}` }
+        { folder: `InstagramProject/Profile/${profile._id}` }
       );
       req.body.image = secure_url;
       req.body.imagePublicId = public_id;
 
       // Delete the old image from Cloudinary
-      if (findProfile.imagePublicId) {
-        await cloudinary.uploader.destroy(findProfile.imagePublicId);
+      if (profile.imagePublicId) {
+        await cloudinary.uploader.destroy(profile.imagePublicId);
       }
     }
 
     // Update the Profile with new details
     const updatedProfile = await ProfileModel.findByIdAndUpdate(
-      {CreatBy:req.params.id},
+      profile._id,
       req.body,
       { new: true } // Return the updated document
     );
 
     return res
-      .status(200)
-      .json({
-        message: `Profile with ID: ${req.params.id} has been updated`,
-        profile: updatedProfile,
-      });
-  } catch (error) {
+    .status(200)
+    .json({
+      message: `Profile with ID: ${req.params.id} has been updated`,
+      profile: updatedProfile,
+    });
+  }  catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 module.exports = {
   CreateProfile,
