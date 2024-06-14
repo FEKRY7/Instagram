@@ -13,7 +13,7 @@ router.post("/CreatePost/:id", myMulter().single("image"), HME, CreatePost);
 
 router.delete("/DeletePost/:id", DeletePost);
 
-router.put("/UpdatePost/:id", myMulter().single("image"), HME, UpdatePost);
+router.patch("/UpdatePost/:id", myMulter().single("image"), HME, UpdatePost);
 
 router.get("/getPost/:id", getPost);
 
