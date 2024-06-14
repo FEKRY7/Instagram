@@ -45,7 +45,7 @@ const getPost = async (req, res) => {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
 
-    const getAll = await PostModel.findOne({CreatBy:req.params.id});
+    const getAll = await PostModel.find({CreatBy:req.params.id});
     
     return Second(res, getAll, 200, http.SUCCESS);
   
