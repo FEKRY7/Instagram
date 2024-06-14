@@ -6,6 +6,7 @@ const {
   getPost,
   DeletePost,
   UpdatePost,
+  getAllPost
 } = require("./post.controller.js");
 
 
@@ -16,5 +17,5 @@ router.delete("/DeletePost/:id", DeletePost);
 router.patch("/UpdatePost/:id", myMulter().single("image"), HME, UpdatePost);
 
 router.get("/getPost/:id", getPost);
-
+router.get("/getAllPost", getAllPost);
 module.exports = router;
