@@ -5,7 +5,8 @@ const {
   CreateProfile,
   DeleteProfile,
   UpdateProfile,
-  getProfile
+  getProfile,
+  getAllProfile
 } = require("./profile.controller.js");
 
 router.post("/CreateProfile/:id", myMulter().single("image"), CreateProfile);
@@ -28,5 +29,6 @@ router.patch("/UpdateProfile/:id", myMulter().single("image"), HME, UpdateProfil
 
 
 router.get("/getProfile/:id", getProfile);
+router.get("/getAllProfile", getAllProfile);
 
 module.exports = router;
