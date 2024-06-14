@@ -78,12 +78,7 @@ const CreateProfile = async (req, res) => {
 
 const getProfile = async (req, res) => {
   try {
-    const findUser = await UserModel.findById(req.params.id);
-    if (!findUser) {
-      return First(res, "User Not Found", 404, http.FAIL);
-    }
-
-    const getAll = await ProfileModel.find({CreatBy:req.params.id});
+    const getAll = await ProfileModel.findById(req.params.id);
     return Second(res, getAll, 200, http.SUCCESS);
     
   } catch (error) {
