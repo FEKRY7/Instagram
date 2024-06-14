@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const { Types } = mongoose;
 const ProfileSchema = new mongoose.Schema(
   {
+    nickName: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
     },
