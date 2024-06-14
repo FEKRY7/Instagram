@@ -124,10 +124,22 @@ const UpdatePost = async (req, res) => {
   }
 };
 
+const getAllPost = async (req, res) => {
+  try {
+    const getAll = await PostModel.find();
+    return Second(res, getAll, 200, http.SUCCESS);
+    
+  } catch (error) {
+    console.error(error);
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
+};
+
 module.exports = {
   CreatePost,
   getPost,
   DeletePost,
   UpdatePost,
+  getAllPost
 };
  
