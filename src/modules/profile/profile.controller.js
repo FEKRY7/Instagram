@@ -93,6 +93,17 @@ const getProfile = async (req, res) => {
 };
 
 
+const getAllProfile = async (req, res) => {
+  try {
+    const getAll = await ProfileModel.find();
+    return Second(res, getAll, 200, http.SUCCESS);
+    
+  } catch (error) {
+    console.error(error);
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
+};
+
 
 const DeleteProfile = async (req, res) => {
   try {
@@ -179,6 +190,7 @@ module.exports = {
   CreateProfile,
   DeleteProfile,
   UpdateProfile,
-  getProfile
+  getProfile,
+  getAllProfile
 };
  
