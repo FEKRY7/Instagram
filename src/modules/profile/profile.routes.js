@@ -24,7 +24,7 @@ router.post("/CreateProfile/:id", myMulter().single("image"), CreateProfile);
 
 router.delete("/DeleteProfile/:id", DeleteProfile);
 
-router.put("/UpdateProfile/:id", myMulter().single("image"), HME, UpdateProfile);
+router.patch("/UpdateProfile/:id", myMulter().single("image"), HME, UpdateProfile);
 
 
 router.get("/getProfile/:id", getProfile);
