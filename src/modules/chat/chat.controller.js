@@ -1,4 +1,7 @@
 const chatModel = require("../../../Database/models/chatModel.js");
+const http = require("../../folderS,F,E/S,F,E.JS");
+const { First, Second, Third } = require("../../utils/httperespons.js");
+
 
 const createChat = async (req, res) => {
   const { firstId, secondId } = req.body;
@@ -8,8 +11,8 @@ const createChat = async (req, res) => {
       members: { $all: [firstId, secondId] },
     });
 
-    if (chat) {
-      return res.status(200).json(chat); // Fixed syntax: changed comma to dot
+    if (chat) { 
+    return Second(res, chat, 200, http.SUCCESS);// Fixed syntax: changed comma to dot
     }
 
     // If no chat exists, create a new one
@@ -18,11 +21,11 @@ const createChat = async (req, res) => {
     });
 
     const response = await newChat.save();
-    return res.status(200).json(response);
+    return Second(res, response, 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Internal server error" }); // Handling errors
-  }
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
 };
 
 const findUserChats = async (req, res) => {
@@ -32,11 +35,11 @@ const findUserChats = async (req, res) => {
       members: { $in: [userId] },
     });
 
-    res.status(200).json(chats);
+    return Second(res, chats, 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
 };
 
 const findChat = async (req, res) => {
@@ -46,11 +49,11 @@ const findChat = async (req, res) => {
       members: { $all: [firstId, secondId] },
     });
 
-    res.status(200).json(chat);
+    return Second(res, chat, 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
 };
 
 module.exports = {
