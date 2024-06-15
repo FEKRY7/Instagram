@@ -1,4 +1,6 @@
 const messageModel = require("../../../Database/models/messageModel");
+const http = require("../../folderS,F,E/S,F,E.JS");
+const { First, Second, Third } = require("../../utils/httperespons.js");
 
 const createMessage = async (req, res) => {
   const { chatId, senderId, text } = req.body;
@@ -9,28 +11,27 @@ const createMessage = async (req, res) => {
       senderId,
       text,
     });
- 
+
     const response = await message.save();
-    res.status(200).json(response);
+    return Second(res, response, 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    return Third(res, "Internal Server Error", 500, http.ERROR);
   }
 };
 
-const getMessage = async (req,res)=>{
-const {chatId} = req.params
-try{
-    const message = await messageModel.find({chatId})
-    res.status(200).json(message);
-}catch (error) {
+const getMessage = async (req, res) => {
+  const { chatId } = req.params;
+  try {
+    const message = await messageModel.find({ chatId });
+    return Second(res, message, 200, http.SUCCESS);
+  } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-}
-}
+    return Third(res, "Internal Server Error", 500, http.ERROR);
+  }
+};
 
-
-module.exports = { 
-    createMessage, 
-    getMessage
+module.exports = {
+  createMessage,
+  getMessage,
 };
