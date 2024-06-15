@@ -3,7 +3,8 @@ const express = require('express');
 const userRouter = require('./src/modules/auth/auth.routes.js')
 const ProfileRouter = require('./src/modules/profile/profile.routes.js')
 const PostRouter = require('./src/modules/post/post.routes.js')
-
+const MessageRouter = require('./src/modules/message/message.routes.js')
+const ChatRouter = require('./src/modules/chat/chat.routes.js')
 
 const mongoConnection = require('./Database/dbConnection.js');
 const dotenv = require('dotenv');
@@ -25,7 +26,8 @@ app.use(cors())
 app.use('/api/auth',userRouter)
 app.use('/api/Profile',ProfileRouter)
 app.use('/api/Post',PostRouter)
- 
+app.use('/api/chat', ChatRouter);
+app.use('/api/message', MessageRouter)
 
 
 // Set up server to listen on specified port (default to 3000)
@@ -40,3 +42,5 @@ app.listen(PORT, () => {
 app.use('*', (req, res) => {
     res.status(404).json({ 'Msg': 'I Can\'t Found' });
 });
+
+
