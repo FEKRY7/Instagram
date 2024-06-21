@@ -5,15 +5,20 @@ const UserModel = require("../../../Database/models/user.model.js");
 const http = require("../../folderS,F,E/S,F,E.JS");
 const { First, Second, Third } = require("../../utils/httperespons.js");
 
-
 const CreatePost = async (req, res) => {
   try {
     const findProfile = await UserModel.findById(req.params.id);
     if (!findProfile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
-       // Set the creator ID
+
+    // Set the creator ID
     req.body.CreatBy = req.params.id; // Assuming 'createdBy' is the correct field name
+
+    // Get current time and minutes
+    const now = new Date();
+    const minutes = now.getMinutes();
+    req.body.createdAtMinutes = minutes; // Add minutes to request body
 
     if (req.file) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
