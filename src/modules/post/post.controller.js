@@ -13,12 +13,11 @@ const CreatePost = async (req, res) => {
     }
 
     // Set the creator ID
-    req.body.CreatBy = req.params.id; // Assuming 'createdBy' is the correct field name
+    req.body.CreatBy = req.params.id;
 
-    // Get current time and minutes
+    // Get current minutes and add to request body
     const now = new Date();
-    const minutes = now.getMinutes();
-    req.body.createdAtMinutes = minutes; // Add minutes to request body
+    req.body.createdAtMinutes = now.getMinutes();
 
     if (req.file) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
