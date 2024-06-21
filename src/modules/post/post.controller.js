@@ -1,13 +1,14 @@
-const ProfileModel = require("../../../Database/models/profile.model.js");
+// const ProfileModel = require("../../../Database/models/profile.model.js");
 const cloudinary = require("../../utils/cloudinary.js");
 const PostModel = require("../../../Database/models/post.model.js");
+const UserModel = require("../../../Database/models/user.model.js");
 const http = require("../../folderS,F,E/S,F,E.JS");
 const { First, Second, Third } = require("../../utils/httperespons.js");
 
 
 const CreatePost = async (req, res) => {
   try {
-    const findProfile = await ProfileModel.findById(req.params.id);
+    const findProfile = await UserModel.findById(req.params.id);
     if (!findProfile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
@@ -40,7 +41,7 @@ const CreatePost = async (req, res) => {
 
 const getPost = async (req, res) => {
   try {
-    const findProfile = await ProfileModel.findById(req.params.id);
+    const findProfile = await UserModel.findById(req.params.id);
     if (!findProfile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
