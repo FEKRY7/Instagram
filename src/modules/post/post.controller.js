@@ -4,7 +4,7 @@ const PostModel = require("../../../Database/models/post.model.js");
 const UserModel = require("../../../Database/models/user.model.js");
 const http = require("../../folderS,F,E/S,F,E.JS");
 const { First, Second, Third } = require("../../utils/httperespons.js");
-const { getMinutes } = require('date-fns');
+const moment = require('moment');
 
 const CreatePost = async (req, res) => {
   try {
@@ -20,8 +20,8 @@ const CreatePost = async (req, res) => {
     // const now = new Date();
     // req.body.createdAtMinutes = now.getTime().toFixed()
     
-    const now = new Date();
-    req.body.createdAtMinutes = getMinutes(now);
+    const now = moment();
+    req.body.createdAtMinutes = now.minutes();
 
     if (req.file) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
