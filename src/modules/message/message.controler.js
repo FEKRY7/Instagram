@@ -21,9 +21,9 @@ const createMessage = async (req, res) => {
 };
 
 const getMessage = async (req, res) => {
-  const { chatId } = req.params;
+  const { chatId,senderId } = req.params;
   try {
-    const message = await messageModel.find({ chatId });
+    const message = await messageModel.find({ chatId,senderId });
     return Second(res, message, 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
