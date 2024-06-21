@@ -15,37 +15,27 @@ const CreatePost = async (req, res) => {
 
     // Set the creator ID
     req.body.CreatBy = req.params.id;
-
-    // Get current minutes and add to request body
-    // const now = new Date();
-    // req.body.createdAtMinutes = now.getTime().toFixed()
     
     const now = moment();
-    req.body.createdAtMinutes = now.minutes();
+    req.body.createdAtMinutes = now.minutes() + now.hours() * 60;
 
     if (req.file) {
-      const { secure_url, public_id } = await cloudinary.uploader.upload(
-        req.file.path,
-        { folder: `InstagramProject/Post/${findProfile._id}/images` }
-      );
-      req.body.image = secure_url;
-      req.body.imagePublicId = public_id;
+      const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: `InstagramProject/Post/${findProfile._id}/images`
+      });
+
+      req.body.image = uploadResult.secure_url;
+      req.body.imagePublicId = uploadResult.public_id;
     }
 
     const createdPost = await PostModel.create(req.body);
 
-    return Second(
-      res,
-      ["Post created", { post: createdPost }],
-      200,
-      http.SUCCESS
-    );
+    return Second(res, ["Post created", { post: createdPost }], 200, http.SUCCESS);
   } catch (error) {
     console.error(error);
     return Third(res, "Internal Server Error", 500, http.ERROR);
   }
 };
-
 
 const getPost = async (req, res) => {
   try {
