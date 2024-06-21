@@ -3,6 +3,6 @@ const router = express.Router();
 const { createMessage, getMessage } = require('./message.controler.js')
 
 router.post("/", createMessage);
-router.get("/:chatId", getMessage);
+router.get("/:chatId/:senderId", getMessage);
 
 module.exports = router;
