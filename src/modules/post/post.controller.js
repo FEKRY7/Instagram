@@ -17,7 +17,7 @@ const CreatePost = async (req, res) => {
 
     // Get current minutes and add to request body
     const now = new Date();
-    req.body.createdAtMinutes = now.toISOString();
+    req.body.createdAtMinutes = now.toISOString()
 
     if (req.file) {
       const { secure_url, public_id } = await cloudinary.uploader.upload(
