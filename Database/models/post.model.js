@@ -14,6 +14,10 @@ const PostSchema = new mongoose.Schema(
         ref: "Profile"
       },
     ],
+    createdAtMinutes: {
+      type: Date,
+      default: Date.now,
+    },
     image: String,
     imagePublicId: String,
     video: String,
