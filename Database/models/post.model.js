@@ -15,10 +15,6 @@ const PostSchema = new mongoose.Schema(
     },
     titles:String,
     images: String,
-    createdAtMinutes: {
-      type: Number,
-      default: () => new Date().getMinutes(),
-    },
     image: String,
     imagePublicId: String,
     video: String,
