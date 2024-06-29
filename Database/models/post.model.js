@@ -11,8 +11,10 @@ const PostSchema = new mongoose.Schema(
     },
     CreatBy: {
       type: Types.ObjectId,
-      ref: "Profile"
+      ref: "Profile",
     },
+    titles:String,
+    images: String,
     createdAtMinutes: {
       type: Number,
       default: () => new Date().getMinutes(),
