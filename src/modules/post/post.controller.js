@@ -1,4 +1,4 @@
-// const ProfileModel = require("../../../Database/models/profile.model.js");
+const ProfileModel = require("../../../Database/models/profile.model.js");
 const cloudinary = require("../../utils/cloudinary.js");
 const PostModel = require("../../../Database/models/post.model.js");
 const UserModel = require("../../../Database/models/user.model.js");
@@ -8,17 +8,19 @@ const moment = require('moment');
 
 const CreatePost = async (req, res) => {
   try {
+    // Find user profile by ID
     const findProfile = await UserModel.findById(req.params.id);
     if (!findProfile) {
       return First(res, "UserProfile Not Found", 404, http.FAIL);
     }
 
     // Set the creator ID
-    req.body.CreatBy = req.params.id;
+    req.body.createdBy = req.params.id;
     
-    const now = moment();
-    req.body.createdAtMinutes = now.minutes() + now.hours() * 60;
+    // const now = moment();
+    // req.body.createdAtMinutes = now.minutes() + now.hours() * 60;
 
+    // Check if file is uploaded
     if (req.file) {
       const uploadResult = await cloudinary.uploader.upload(req.file.path, {
         folder: `InstagramProject/Post/${findProfile._id}/images`
@@ -28,7 +30,20 @@ const CreatePost = async (req, res) => {
       req.body.imagePublicId = uploadResult.public_id;
     }
 
+    // Create a new post
     const createdPost = await PostModel.create(req.body);
+    if (createdPost) {
+      const adminProfile = await ProfileModel.findById(req.params.id);
+      if (adminProfile) {
+        // Ensure createdPost.nickName and createdPost.images are arrays before pushing
+        createdPost.titles = createdPost.titles || [];
+        createdPost.images = createdPost.images || [];
+
+        createdPost.titles.push(adminProfile.title);
+        createdPost.images.push(adminProfile.image);
+        await createdPost.save();
+      }
+    }
 
     return Second(res, ["Post created", { post: createdPost }], 200, http.SUCCESS);
   } catch (error) {
