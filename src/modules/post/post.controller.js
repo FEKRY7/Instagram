@@ -4,19 +4,25 @@ const PostModel = require("../../../Database/models/post.model.js");
 const UserModel = require("../../../Database/models/user.model.js");
 const http = require("../../folderS,F,E/S,F,E.JS");
 const { First, Second, Third } = require("../../utils/httperespons.js");
+const moment = require('moment');
 
- 
 const CreatePost = async (req, res) => {
   try {
-    const findProfile = await UserModel.findById(req.params.id);
-    if (!findProfile) {
-      return First(res, "UserProfile Not Found", 404, http.FAIL);
+    const findUser = await UserModel.findById(req.params.id);
+    if (!findUser) {
+      return First(res, "User Not Found", 404, http.FAIL);
     }
 
     // Set the creator ID
     req.body.CreatBy = req.params.id;
     
+    const findProfile = await ProfileModel.findById(req.params.idProfile);
+    if (!findProfile) {
+      return First(res, "UserProfile Not Found", 404, http.FAIL);
+    }
 
+    req.body.CreatProfile = req.params.idProfile;
+    
     if (req.file) {
       const uploadResult = await cloudinary.uploader.upload(req.file.path, {
         folder: `InstagramProject/Post/${findProfile._id}/images`
@@ -27,14 +33,9 @@ const CreatePost = async (req, res) => {
     }
 
     const createdPost = await PostModel.create(req.body);
-    if (createdPost) {
-      const Admin = await ProfileModel.findByIdAndUpdate(req.params.cc);
-      createdPost.titles.push(Admin.title);
-      createdPost.images.push(Admin.image);
-      createdPost.save();
-    }
-
+    
     return Second(res, ["Post created", { post: createdPost }], 200, http.SUCCESS);
+  
   } catch (error) {
     console.error(error);
     return Third(res, "Internal Server Error", 500, http.ERROR);
