@@ -11,10 +11,12 @@ const PostSchema = new mongoose.Schema(
     },
     CreatBy: {
       type: Types.ObjectId,
+      ref: "user",
+    },
+    CreatProfile:{
+      type: Types.ObjectId,
       ref: "Profile",
     },
-    titles:String,
-    images: String,
     image: String,
     imagePublicId: String,
     video: String,
