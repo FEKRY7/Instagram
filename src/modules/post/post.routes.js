@@ -10,7 +10,7 @@ const {
 } = require("./post.controller.js");
 
 
-router.post("/CreatePost/:id/:cc", myMulter().single("image"), HME, CreatePost);
+router.post("/CreatePost/:id/:idProfile", myMulter().single("image"), HME, CreatePost);
 
 router.delete("/DeletePost/:id", DeletePost);
 
