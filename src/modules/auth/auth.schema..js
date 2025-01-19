@@ -15,13 +15,13 @@ const SignUpSchema = joi
       .pattern(/^[a-zA-Z]{3,15}[0-9]{0,3}@(hotmail|gmail|yahoo).com$/)
       .required(),
     password: joi.string().required(),
-    reaPetpassword: joi
-      .string()
-      .required()
-      .valid(joi.ref("password"))
-      .messages({
-        "any.only": "Passwords do not match",
-      }),
+    // reaPetpassword: joi
+    //   .string()
+    //   .required()
+    //   .valid(joi.ref("password"))
+    //   .messages({
+    //     "any.only": "Passwords do not match",
+    //   }),
   })
   .required();
 
