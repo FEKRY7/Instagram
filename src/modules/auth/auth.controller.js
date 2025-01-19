@@ -30,7 +30,7 @@ const SignUp = async (req, res) => {
     // Creating the user
     const user = await UserModel.create(req.body);
     const html = signUpTemplate(
-      `https://instagram-2-ebur.onrender.com/api/auth/activat_account/${token}`
+      `https://instagram-4.onrender.com/api/auth/activat_account/${token}`
     );
     const messageSent = await sendEmail({
       to: user.email,
